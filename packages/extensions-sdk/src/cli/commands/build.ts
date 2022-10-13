@@ -15,7 +15,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import virtual from '@rollup/plugin-virtual';
-import typescript from 'rollup-plugin-typescript2';
+import esbuild from 'rollup-plugin-esbuild';
 import { terser } from 'rollup-plugin-terser';
 import styles from 'rollup-plugin-styles';
 import vue from 'rollup-plugin-vue';
@@ -568,7 +568,7 @@ function getRollupOptions({
 		plugins: [
 			typeof input !== 'string' ? virtual(input) : null,
 			mode === 'browser' ? vue({ preprocessStyles: true }) : null,
-			languages.includes('typescript') ? typescript({ check: false }) : null,
+			languages.includes('typescript') ? esbuild({ include: /\.tsx?$/ }) : null,
 			mode === 'browser' ? styles() : null,
 			...plugins,
 			nodeResolve({ browser: mode === 'browser' }),
