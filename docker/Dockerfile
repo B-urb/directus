@@ -1,4 +1,4 @@
-ARG NODE_VERSION=16-alpine
+ARG NODE_VERSION=16
 
 FROM node:${NODE_VERSION} as builder
 
@@ -34,7 +34,19 @@ ENV \
 
 RUN \
   # Upgrade system and install 'ssmtp' to be able to send mails
-  apk upgrade --no-cache && apk add --no-cache \
+  #apk upgrade --no-cache && apk add --no-cache \
+  #ssmtp \
+  # Add support for specifying the timezone of the container
+  # using the "TZ" environment variable.
+  #tzdata \
+  # Create directory for Directus with corresponding ownership
+  # (can be omitted on newer Docker versions since WORKDIR below will do the same)
+  #&& mkdir /directus && chown node:node /directus
+  
+  
+ RUN \
+  # Upgrade system and install 'ssmtp' to be able to send mails
+  apt upgrade && apt install -y \
   ssmtp \
   # Add support for specifying the timezone of the container
   # using the "TZ" environment variable.
@@ -42,6 +54,7 @@ RUN \
   # Create directory for Directus with corresponding ownership
   # (can be omitted on newer Docker versions since WORKDIR below will do the same)
   && mkdir /directus && chown node:node /directus
+
 
 # Switch to user 'node' and directory '/directus'
 USER node
